@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>INSTRUCTIONS</title>
+</head>
+<body>
+<p> <font color="navyblue" face="Engravers MT" width="200" size="7"><marquee>INSTRUCTIONS FOR CANDIDATES REGARDING  ONLINE EXAMINATION</marquee></font></p>
+
+<br>
+<br>
+<br>
+<br>
+<ul>
+<li>GENERAL INSTRUCTIONS </li>
+<br>
+<br>
+<br>
+
+<li>All CANDIDATES should have their ADMIT CARDS with them .</li>
+<li>CANDIDATES are STRICTLY adviced to report in the EXAMINATION  HALL 20 minutes before the commencement of the exam .</li>
+<li>Use of LOG TABLES and  DIGITAL EQUIPMENTS such as MOBILE PHONES , CALCULATORS is STRICTLY FORBIDDEN .</li>
+<li>Any CANDIDATES caught cheating will be barred from taking examination for next 5 YEARS .</li>
+<br>
+<br>
+<br>
+
+<li>INSTRUCTIONS FOR QUESTION PAPER</li>
+<br>
+<br>
+<br>
+<li>There are 20 questions in  all .</li>
+<li>The DURATION for  the TEST  will be 10 minutes .</li>
+<li>Read the questions CAREFULLY before attempting .</li>
+<li>CANDIDATES are advised to attempt all the questions .</li>
+<li>There will be 4 options for every question .</li>
+<li>Select any 1 of the options as answers by clicking on button before them .</li>
+<li> There will be no NEGATIVE MARKING .</li>
+<li>Do not take more than 30 seconds for more than 1 question .</li>
+
+
+
+
+
+
+
+</ul>
+</body>
+</html>

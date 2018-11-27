@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+  <head>
+    <title>formDemo.html</title>
+    <meta charset = "UTF-8" />
+  </head>
+  <body>
+    <h1>online attendance</h1>
+    <fieldset>
+    <form action="new.php" method="POST">
+        <p>
+             <h1>Select branch</h1>
+             <select id = "myList">
+               <option type = "text" name="branch" value="cse">CSE</option>
+               <option type = "text" name="branch" value="ece">ECE</option>
+               <option type = "text" name="branch" value="me">ME</option>
+               <option type = "text" name="branch" value="ee">EE</option>
+               <option type = "next" name="branch" value="ce">CE</option>               
+             </select>
+          <h1>Select year</h1>
+        <label class="container">1
+        <input type="radio" checked="checked" name="year">
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">2
+          <input type="radio" checked="checked" name="year">
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">3
+          <input type="radio" checked="checked" name="year">
+           <span class="checkmark"></span>
+        </label>
+        <label class="container">4
+          <input type="radio" checked="checked" name="year">
+           <span class="checkmark"></span>
+        </label></br></br>
+        <input type="submit"  value="submit"> 
+    </form>
+    </fieldset>
+ 
+</body>
+</html>

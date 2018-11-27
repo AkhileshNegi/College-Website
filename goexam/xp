@@ -1,0 +1,50 @@
+<?php
+$host="localhost";
+$user="root";
+$pass="";
+$con=mysql_connect($host,$user,$pass) or die("unable to connect");
+mysql_select_db("user",$con);
+
+if(isset($_GET['name']) && isset($_GET['password']))
+{
+$NAME=$_GET["name"];
+$PASSWORD=$_GET["password"];
+
+$host="localhost";
+$user="root";
+$pass="";
+$con=mysql_connect($host,$user,$pass) or die("unable to connect");
+mysql_select_db("user",$con);
+$sql="SELECT * FROM answersheet WHERE lname='$NAME'";
+$query=mysql_query($sql,$con);
+if(mysql_num_rows($query) > 0)
+{
+   while($row = mysql_fetch_array($query))
+   {
+echo"name:".$row["lname"];
+    echo"password:".$row["password"];
+    echo"<br/>";
+
+
+if($row["password"]==$PASSWORD)
+    {
+     echo"Your marks is:".$row["marks"];
+    }
+
+        else
+        {
+
+      echo"wrong password";
+         }
+    }
+}
+else
+{
+
+?> 
+<FONT color="black" face="Georgia" size='5' ><?php echo"You have not given the test. First give the test";?></FONT>
+<a href="welcome.php"> Click here</a>
+<?php 
+ }
+
+  }?>

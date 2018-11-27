@@ -1,0 +1,1019 @@
+<?php
+
+// Start the session
+session_start();
+
+$servername = 'localhost';
+$username = $_SESSION['username'];
+$password = $_SESSION['password'];
+$dbname = 'milkeledger';
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if (!$conn) {
+header ('location: /index.html');
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<!--Language is set to English-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content=""/>
+    <!--Refresh The page every in 5 sec-->
+    <link href="/css/index/index.css" rel="stylesheet" />
+    <!--CSS for Website-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--The width=device-width part sets the width of the page to follow the screen-width of the device (which will vary depending on the device).
+    The initial-scale=1 part sets the initial zoom level when the page is first loaded by the browser.-->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <!--Adding Bootstrap Min CSS Compatibility to the Device-->
+    <script src="/js/jquery.min.js"></script>
+    <!--Adding jquery.min.js Compatibility to the Device-->
+    <script src="/js/bootstrap.min.js"></script>
+    <!--Adding bootstrap.min.js Compatibility to the Device-->
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <!--Google Fonts-->
+    <title>Milk-e-Ledger &copy;</title>
+  </head>
+
+<body>
+
+<!--Navigation Bar-->
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="nav-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.milkeledger.com"><span style="font-family: sofia; font-size: 25px; color: white;">Milk-e-Ledger<sup>&copy;</sup></span></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav" style="font-family: verdana; font-size: 18px;">
+          <li class="active"><a href="/milk_entry/today_milk_entry.html">Entry</a></li>
+          <li><a href="/milk_e_ledger/milk_e_ledger.html">e-Ledger</a></li>
+          <li><a href="/milk_profiles/milk_profiles.html">Profiles</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<?php
+$servername = 'localhost';
+$username = $_SESSION['username'];
+$password = $_SESSION['password'];
+$dbname = 'milkeledger';
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+$date = date('Y-m-d');
+
+$sql = "SELECT ID, first_name, last_name, `milk_on_$date`, `mawa_on_$date` FROM
+milk_man_profile ";
+$result = $conn->query($sql);
+
+if (@$result->num_rows > 0) {
+    
+  echo "<form action='/php/update_milk_entries.php' method='post' >
+  <div class='container text-center'><b>
+  <input type='date' readonly name='date' style='text-align: center; font-family: verdana; border: 0px solid;' value='$date'/></b>
+  </div>
+  <div class='container'>
+  <div class='table-responsive'>
+  <table class='table table-striped table-bordered'><tr ><th>Name</th><th style='text-align: center;'>Milk</th><th style='text-align: center;'>Mawa</th></tr>";
+  // output data of each row
+  while($row = $result->fetch_assoc()) {
+  echo "<tr><td>".$row["first_name"]." ".$row["last_name"]."</td>
+      <td style='text-align: center;'><input required type='number' placeholder='Milk in Litres' min='0'  max='50' step='0.250'
+      value = '".$row["milk_on_$date"]."' name='milk_".$row["ID"]."' id='milk_".$row["ID"]."'></td>
+      <td style='text-align: center;'><input required type='number' placeholder='Mawa in gms' min='0' max='300' 
+      value = '".$row["mawa_on_$date"]."' name='mawa_".$row["ID"]."' id='mawa_".$row["ID"]."'></td>
+    </tr>";
+    }
+    echo "</table></div></div>";
+  echo "
+    <br/>
+    <div class='container text-center'>
+    <form action='/milk_entry/milk_add_new_profile.html' class='text-center'>
+    <button id='update_button' class='btn btn-success'>Update <span class='glyphicon glyphicon-cloud-upload'></span>
+    </button><br/><br/></div>";
+    
+} else {
+    echo <<< HEREDOC
+    <div class="container">
+    <div class='table-responsive'>
+    <table class="table table-bordered" style='border: 2px solid black; font-family: verdana'><tr><th class="text-center">No Profiles</th></tr>
+    </table>
+    <br/>
+    <form action="/milk_profiles/milk_add_new_profile.html" class="text-center">
+    <button class="btn btn-danger">Add New
+    </button>
+    </form>
+    </div>
+    </div>
+HEREDOC;
+}
+
+$conn->close();
+?>
+
+</body>
+</html>
+
+<script>
+$(document).ready(function(){
+    $('#update_button').click(function(){
+        $('#update_button').addClass("disabled");
+    });
+});
+</script>
+
+<script>
+window.onload = function disable_entry()
+{
+   var x = document.getElementById('milk_1');
+   
+  if(milk_1.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_1');
+   
+  if(mawa_1.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_2');
+   
+  if(milk_2.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_2');
+   
+  if(mawa_2.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_3');
+   
+  if(milk_3.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_3');
+   
+  if(mawa_3.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_4');
+   
+  if(milk_4.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_4');
+   
+  if(mawa_4.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_5');
+   
+  if(milk_5.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_5');
+   
+  if(mawa_5.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_6');
+   
+  if(milk_6.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_6');
+   
+  if(mawa_6.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_7');
+   
+  if(milk_7.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_7');
+   
+  if(mawa_7.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_8');
+   
+  if(milk_8.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_8');
+   
+  if(mawa_8.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_9');
+   
+  if(milk_9.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_9');
+   
+  if(mawa_9.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_10');
+   
+  if(milk_10.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_10');
+   
+  if(mawa_10.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_11');
+   
+  if(milk_11.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_11');
+   
+  if(mawa_11.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_12');
+   
+  if(milk_12.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_12');
+   
+  if(mawa_12.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_13');
+   
+  if(milk_13.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_13');
+   
+  if(mawa_13.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_14');
+   
+  if(milk_14.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_14');
+   
+  if(mawa_14.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_15');
+   
+  if(milk_15.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_15');
+   
+  if(mawa_15.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_16');
+   
+  if(milk_16.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_16');
+   
+  if(mawa_16.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_17');
+   
+  if(milk_17.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_17');
+   
+  if(mawa_17.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_18');
+   
+  if(milk_18.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_18');
+   
+  if(mawa_18.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_19');
+   
+  if(milk_19.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_19');
+   
+  if(mawa_19.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_20');
+   
+  if(milk_20.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_20');
+   
+  if(mawa_20.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_21');
+   
+  if(milk_21.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_21');
+   
+  if(mawa_21.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_22');
+   
+  if(milk_22.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_22');
+   
+  if(mawa_22.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_23');
+   
+  if(milk_23.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_23');
+   
+  if(mawa_23.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_24');
+   
+  if(milk_24.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_24');
+   
+  if(mawa_24.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_25');
+   
+  if(milk_25.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_25');
+   
+  if(mawa_25.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_26');
+   
+  if(milk_26.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_26');
+   
+  if(mawa_26.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_27');
+   
+  if(milk_27.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_27');
+   
+  if(mawa_27.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_28');
+   
+  if(milk_28.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_28');
+   
+  if(mawa_28.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_29');
+   
+  if(milk_29.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_29');
+   
+  if(mawa_29.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_30');
+   
+  if(milk_30.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_30');
+   
+  if(mawa_30.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_31');
+   
+  if(milk_31.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_31');
+   
+  if(mawa_31.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  
+  
+  //NEW
+  
+  var x = document.getElementById('milk_32');
+   
+  if(milk_32.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_32');
+   
+  if(mawa_32.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+    
+}
+
+var x = document.getElementById('milk_33');
+   
+  if(milk_33.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_33');
+   
+  if(mawa_33.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_34');
+   
+  if(milk_34.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_34');
+   
+  if(mawa_34.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_35');
+   
+  if(milk_35.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_35');
+   
+  if(mawa_35.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_36');
+   
+  if(milk_36.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_36');
+   
+  if(mawa_36.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    
+  //NEW
+  
+  var x = document.getElementById('milk_37');
+   
+  if(milk_37.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_37');
+   
+  if(mawa_37.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_38');
+   
+  if(milk_38.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_38');
+   
+  if(mawa_38.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_39');
+   
+  if(milk_39.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_39');
+   
+  if(mawa_39.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_40');
+   
+  if(milk_40.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_40');
+   
+  if(mawa_40.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_41');
+   
+  if(milk_41.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_41');
+   
+  if(mawa_41.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_42');
+   
+  if(milk_42.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_42');
+   
+  if(mawa_42.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_43');
+   
+  if(milk_43.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_43');
+   
+  if(mawa_43.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_44');
+   
+  if(milk_44.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_44');
+   
+  if(mawa_44.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_45');
+   
+  if(milk_45.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_45');
+   
+  if(mawa_45.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_46');
+   
+  if(milk_46.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_46');
+   
+  if(mawa_46.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_47');
+   
+  if(milk_47.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_47');
+   
+  if(mawa_47.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_48');
+   
+  if(milk_48.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_48');
+   
+  if(mawa_48.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_49');
+   
+  if(milk_49.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_49');
+   
+  if(mawa_49.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_50');
+   
+  if(milk_50.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_50');
+   
+  if(mawa_50.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_51');
+   
+  if(milk_51.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_51');
+   
+  if(mawa_51.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_52');
+   
+  if(milk_52.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_52');
+   
+  if(mawa_52.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_53');
+   
+  if(milk_53.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_53');
+   
+  if(mawa_53.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_54');
+   
+  if(milk_54.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_54');
+   
+  if(mawa_54.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_55');
+   
+  if(milk_55.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_55');
+   
+  if(mawa_55.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_56');
+   
+  if(milk_56.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_56');
+   
+  if(mawa_56.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_57');
+   
+  if(milk_57.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_57');
+   
+  if(mawa_57.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_58');
+   
+  if(milk_58.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_58');
+   
+  if(mawa_58.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_59');
+   
+  if(milk_59.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_59');
+   
+  if(mawa_59.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_60');
+   
+  if(milk_60.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_60');
+   
+  if(mawa_60.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_61');
+   
+  if(milk_61.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_61');
+   
+  if(mawa_61.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  //NEW
+  
+  var x = document.getElementById('milk_62');
+   
+  if(milk_62.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+  
+  var x = document.getElementById('mawa_62');
+   
+  if(mawa_62.value != '0'){       
+        x.setAttribute('readonly', 'readonly');   
+    }
+    }
+</script>

@@ -1,0 +1,19 @@
+<?php
+require_once('connect.php');
+$branch = $_POST['branch'];
+$year = $_POST['year'];
+$table=$branch.$year;
+$check = mysql_query($con,"SELECT email FROM user WHERE email='$email'");
+$count = mysql_num_rows($check);
+if($count == true)
+{
+   
+}
+else
+{
+echo "you are not registered";
+?>
+
+<?php
+}
+?>
